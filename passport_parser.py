@@ -22,8 +22,8 @@ def parsePassports():
     lastErrors = 0
 
     for serial in range(4016, 4018):
+        egeObject.serial = serial
         for number in range(600000, 700000):
-            egeObject.serial = serial
             egeObject.number = number
             try:
                 if egeObject.isPassportValid() is True:
