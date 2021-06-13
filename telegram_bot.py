@@ -58,7 +58,6 @@ def main():
     parser = argparse.ArgumentParser(description='Telegram bot')
     parser.add_argument('token', type=str, help='Bot token')
     args = parser.parse_args()
-    print(args.token)
 
     logging.basicConfig(format='%(asctime)s - %(name)s -\
                         %(levelname)s - %(message)s', level=logging.INFO)
