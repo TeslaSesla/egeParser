@@ -10,6 +10,14 @@ from telegram.ext import CommandHandler
 
 import ege_parser
 
+class Data():
+    """Работа с данными, удаление/добавление паспортов"""
+
+    con = sqlite3.connect('bot_data.db')
+    cur = None
+
+    def __init__(self):
+        self.cur = self.con.cursor()
 
 
 class EgeThread():
@@ -42,13 +50,16 @@ def addPassport(update, context):
         return
 
     egeObj = ege_parser.Ege(passport_data[0], passport_data[1])
-    if not egeObj.isPassportValid():
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Участника с таким паспортом не существует.\nПопробуйте ещё раз")
+    try:
+        if not egeObj.isPassportValid():
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Участника с таким паспортом не существует.\nПопробуйте ещё раз")
+            return
+    except Exception as e:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Проблемы с получением доступа к ege.spb.ru.\nПопробуйте позднее")
+        print(e)
         return
 
-
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Добавлен паспорт: " + str(serial) + " " + str(number))
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Добавлен паспорт: " + str(serial) + " " + str(number))
 
 
 def start(update, context):
